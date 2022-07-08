@@ -48,7 +48,7 @@ extern int input(); // lex function
  *  Add Your own definitions here
  */
 
-void inLinecomment() {
+int inLineComment() {
   register int c;
 
   while(1) {
@@ -65,7 +65,6 @@ void inLinecomment() {
       yylval.str = "EOF in comment";
       return -1;
     }
-  }
   }
   
   return 0;
