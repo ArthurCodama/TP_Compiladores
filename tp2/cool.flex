@@ -153,7 +153,6 @@ C_BOOL            (t(?i:[rue])|f(?i:[alse]))
 ID_TYPE           [A-Z][a-z|A-Z|0-9|_]*
 ID_OBJECT         [a-z][a-z|A-Z|0-9|_]*
 WHITE_SPACE       [\s\f\r\t\v]
-DARROW            =>
 C_INT             [0-9]+
 C_BOOL            (t(?i:[rue])|f(?i:[alse]))
 ID_TYPE           [A-Z][a-z|A-Z|0-9_]*
@@ -187,11 +186,30 @@ NOT               (?i:not)
  /*
   *  The multiple-character operators.
   */
-{DARROW}		{ return (DARROW); }
-"--"        {printf("IL Comment");inLineComment();}
-"(*"        {printf("ML Comment");multiLineComment();}
-"\""        {printf("String"); return getString();}
-<<EOF>>     {yyterminate();}
+{DARROW}		      { return (DARROW); }
+"--"              { printf("IL Comment"); inLineComment(); }
+"(*"              { printf("ML Comment"); multiLineComment(); }
+"\""              { printf("String"); return getString(); }
+
+{CLASS}           { return (CLASS); }
+{ELSE}            { return (ELSE); }
+{FI}              { return (FI); }
+{IF}              { return (IF); }
+{IN}              { return (IN); }
+{INHERITS}        { return (INHERITS); }
+{ISVOID}          { return (ISVOID); }
+{LET}             { return (LET); }
+{LOOP}            { return (LOOP); }
+{POOL}            { return (POOL); }
+{THEN}            { return (THEN); }
+{WHILE}           { return (WHILE); }
+{CASE}            { return (CASE); }
+{ESAC}            { return (ESAC); }
+{NEW}             { return (NEW); }
+{OF}              { return (OF); }
+{NOT}             { return (NOT); }
+
+<<EOF>>           { yyterminate(); }
 
 
 
