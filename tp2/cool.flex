@@ -234,25 +234,25 @@ NOT               (?i:not)
 {NOT}             { return (NOT); }
 
 "=>"              { return (DARROW); }
-"<-"              { RETURN (ASSIGN); }
-"."               { RETURN (POINT); }
-"("               { RETURN (L_PAR); }
-")"               { RETURN (R_PAR); }
-"@"               { RETURN (AT); }
-"{"               { RETURN (L_KEY); }
-"}"               { RETURN (R_KEY); }
-";"               { RETURN (SEMIC); }
-":"               { RETURN (COLON); }
-"["               { RETURN (L_BRA); }
-"]"               { RETURN (R_BRA); }
-"+"               { RETURN (PLUS); }
-"-"               { RETURN (MINUS); }
-"*"               { RETURN (ASTERISK); }
-"/"               { RETURN (BAR); }
-"<"               { RETURN (LT); }
-"<="              { RETURN (LE); }
-"="               { RETURN (EQ); }
-"~"               { RETURN (TILDE); }
+"<-"              { return (ASSIGN); }
+"."               { return (POINT); }
+"("               { return (L_PAR); }
+")"               { return (R_PAR); }
+"@"               { return (AT); }
+"{"               { return (L_KEY); }
+"}"               { return (R_KEY); }
+";"               { return (SEMIC); }
+":"               { return (COLON); }
+"["               { return (L_BRA); }
+"]"               { return (R_BRA); }
+"+"               { return (PLUS); }
+"-"               { return (MINUS); }
+"*"               { return (ASTERISK); }
+"/"               { return (BAR); }
+"<"               { return (LT); }
+"<="              { return (LE); }
+"="               { return (EQ); }
+"~"               { return (TILDE); }
 
 <<EOF>>           { yyterminate(); }
 
