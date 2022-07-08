@@ -28,8 +28,8 @@ extern FILE *fin; /* we read from this file */
  */
 #undef YY_INPUT
 #define YY_INPUT(buf,result,max_size) \
-	if ( (result = fread( (char*)buf, sizeof(char), max_size, fin)) < 0) \
-		YY_FATAL_ERROR( "read() in flex scanner failed");
+  if ( (result = fread( (char*)buf, sizeof(char), max_size, fin)) < 0) \
+    YY_FATAL_ERROR( "read() in flex scanner failed");
 
 char string_buf[MAX_STR_CONST]; /* to assemble string constants */
 char *string_buf_ptr;
@@ -184,8 +184,8 @@ NOT               (?i:not)
 "(*"              { printf("ML Comment"); multiLineComment(); }
 "\""              { printf("String"); return getString(); }
 
-{C_INT}           { return (C_INT); }
-{C_BOOL}          { return (C_BOOL); }
+{C_INT}           { return (INT_CONST); }
+{C_BOOL}          { return (BOOL_CONST); }
 {WHITE_SPACE}     { return (WHITE_SPACE); }
 {CLASS}           { return (CLASS); }
 {ELSE}            { return (ELSE); }
@@ -203,11 +203,11 @@ NOT               (?i:not)
 {ESAC}            { return (ESAC); }
 {NEW}             { return (NEW); }
 {OF}              { return (OF); }
-{ID_TYPE}         { return (ID_TYPE); }
-{ID_OBJECT}       { return (ID_OBJECT); }
+{ID_TYPE}         { return (TYPEID); }
+{ID_OBJECT}       { return (OBJECTID); }
 
-"=>"    		      { return (DARROW); }
-"<-"              { RETURN (L_ARROW); }
+"=>"              { return (DARROW); }
+"<-"              { RETURN (ASSIGN); }
 "."               { RETURN (POINT); }
 "("               { RETURN (L_PAR); }
 ")"               { RETURN (R_PAR); }
@@ -223,9 +223,9 @@ NOT               (?i:not)
 "*"               { RETURN (ASTERISK); }
 "/"               { RETURN (BAR); }
 "<"               { RETURN (LT); }
-"<="              { RETURN (LTE); }
+"<="              { RETURN (LE); }
 "="               { RETURN (EQ); }
-"~"               { RETURN (TILDE); }
+"~"               { RETURN (NOT); }
 
 <<EOF>>           { yyterminate(); }
 
