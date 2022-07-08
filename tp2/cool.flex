@@ -235,24 +235,24 @@ NOT               (?i:not)
 
 "=>"              { return (DARROW); }
 "<-"              { return (ASSIGN); }
-"."               { return (POINT); }
-"("               { return (L_PAR); }
-")"               { return (R_PAR); }
-"@"               { return (AT); }
-"{"               { return (L_KEY); }
-"}"               { return (R_KEY); }
-";"               { return (SEMIC); }
-":"               { return (COLON); }
-"["               { return (L_BRA); }
-"]"               { return (R_BRA); }
-"+"               { return (PLUS); }
-"-"               { return (MINUS); }
-"*"               { return (ASTERISK); }
-"/"               { return (BAR); }
-"<"               { return (LT); }
 "<="              { return (LE); }
-"="               { return (EQ); }
-"~"               { return (TILDE); }
+"."               { return "."; }
+"("               { return "("; }
+")"               { return ")"; }
+"@"               { return "@"; }
+"{"               { return "{"; }
+"}"               { return "}"; }
+";"               { return ";"; }
+":"               { return ":"; }
+"["               { return "["; }
+"]"               { return "]"; }
+"+"               { return "+"; }
+"-"               { return "-"; }
+"*"               { return "*"; }
+"/"               { return "/"; }
+"<"               { return "<"; }
+"="               { return "="; }
+"~"               { return "~"; }
 
 <<EOF>>           { yyterminate(); }
 
