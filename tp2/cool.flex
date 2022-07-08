@@ -179,6 +179,28 @@ C_BOOL            (t(?i:[rue])|f(?i:[alse]))
 ID_TYPE           [A-Z][a-z|A-Z|0-9|_]*
 ID_OBJECT         [a-z][a-z|A-Z|0-9|_]*
 WHITE_SPACE       [\s\f\r\t\v]
+C_INT             [0-9]+
+C_BOOL            (t(?i:[rue])|f(?i:[alse]))
+ID_TYPE           [A-Z][a-z|A-Z|0-9_]*
+ID_OBJECT         [a-z][a-z|A-Z|0-9_]*
+WHITE_SPACE       [\ \f\r\t\v]
+CLASS             (?i:class)
+ELSE              (?i:else)
+FI                (?i:fi)
+IF                (?i:if)
+IN                (?i:in)
+INHERITS          (?i:inherits)
+ISVOID            (?i:isvoid)
+LET               (?i:let)
+LOOP              (?i:loop)
+POOL              (?i:pool)
+THEN              (?i:then)
+WHILE             (?i:while)
+CASE              (?i:case)
+ESAC              (?i:esac)
+NEW               (?i:new)
+OF                (?i:of)
+NOT               (?i:not)
 
 %%
 
@@ -190,11 +212,38 @@ WHITE_SPACE       [\s\f\r\t\v]
  /*
   *  The multiple-character operators.
   */
+<<<<<<< HEAD
 {DARROW}		{ return (DARROW); }
 "--"        {if( inLineComment() == -1 ) return ERROR;}
 "(*"        {if( multiLineComment() == -1 ) return ERROR;}
 "\""        {if( setStringValue() == -1 ) return ERROR; return STR_CONST;}
 <<EOF>>     {yyterminate();}
+=======
+{DARROW}		      { return (DARROW); }
+"--"              { printf("IL Comment"); inLineComment(); }
+"(*"              { printf("ML Comment"); multiLineComment(); }
+"\""              { printf("String"); return getString(); }
+
+{CLASS}           { return (CLASS); }
+{ELSE}            { return (ELSE); }
+{FI}              { return (FI); }
+{IF}              { return (IF); }
+{IN}              { return (IN); }
+{INHERITS}        { return (INHERITS); }
+{ISVOID}          { return (ISVOID); }
+{LET}             { return (LET); }
+{LOOP}            { return (LOOP); }
+{POOL}            { return (POOL); }
+{THEN}            { return (THEN); }
+{WHILE}           { return (WHILE); }
+{CASE}            { return (CASE); }
+{ESAC}            { return (ESAC); }
+{NEW}             { return (NEW); }
+{OF}              { return (OF); }
+{NOT}             { return (NOT); }
+
+<<EOF>>           { yyterminate(); }
+>>>>>>> ca821f04484619b6e01c3ceac6a0ca9f5476a456
 
 
 
