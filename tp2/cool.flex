@@ -207,12 +207,12 @@ NOT               (?i:not)
   *  The multiple-character operators.
   */
 
+{WHITE_SPACE}     {}
 "--"              { if( inLineComment() == -1 ) return (ERROR); }
 "(*"              { if( multiLineComment() == -1 ) return (ERROR); }
 "\""              { if( setStringValue() == -1 ) return (ERROR); return (STR_CONST); }
 {C_INT}           { return (INT_CONST); }
 {C_BOOL}          { return (BOOL_CONST); }
-{WHITE_SPACE}     { return (WHITE_SPACE); }
 {CLASS}           { return (CLASS); }
 {ELSE}            { return (ELSE); }
 {FI}              { return (FI); }
@@ -236,23 +236,23 @@ NOT               (?i:not)
 "=>"              { return (DARROW); }
 "<-"              { return (ASSIGN); }
 "<="              { return (LE); }
-"."               { return "."; }
-"("               { return "("; }
-")"               { return ")"; }
-"@"               { return "@"; }
-"{"               { return "{"; }
-"}"               { return "}"; }
-";"               { return ";"; }
-":"               { return ":"; }
-"["               { return "["; }
-"]"               { return "]"; }
-"+"               { return "+"; }
-"-"               { return "-"; }
-"*"               { return "*"; }
-"/"               { return "/"; }
-"<"               { return "<"; }
-"="               { return "="; }
-"~"               { return "~"; }
+"."               { return '.'; }
+"("               { return '('; }
+")"               { return ')'; }
+"@"               { return '@'; }
+"{"               { return '{'; }
+"}"               { return '}'; }
+";"               { return ';'; }
+":"               { return ':'; }
+"["               { return '['; }
+"]"               { return ']'; }
+"+"               { return '+'; }
+"-"               { return '-'; }
+"*"               { return '*'; }
+"/"               { return '/'; }
+"<"               { return '<'; }
+"="               { return '='; }
+"~"               { return '~'; }
 
 <<EOF>>           { yyterminate(); }
 
