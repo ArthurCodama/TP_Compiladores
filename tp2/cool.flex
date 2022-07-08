@@ -226,14 +226,6 @@ NOT               (?i:not)
 "<="              { RETURN (LTE); }
 "="               { RETURN (EQ); }
 "~"               { RETURN (TILDE); }
-""                { RETURN (); }
-""                { RETURN (); }
-""                { RETURN (); }
-""                { RETURN (); }
-""                { RETURN (); }
-""                { RETURN (); }
-""                { RETURN (); }
-""                { RETURN (); }
 
 <<EOF>>           { yyterminate(); }
 
