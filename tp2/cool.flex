@@ -7,6 +7,10 @@
  *  output, so headers and global definitions are placed here to be visible
  * to the code in the file.  Don't remove anything that was here initially
  */
+
+%option noyywrap
+
+
 %{
 #include <cool-parse.h>
 #include <stringtab.h>
@@ -38,6 +42,7 @@ extern int curr_lineno;
 extern int verbose_flag;
 
 extern YYSTYPE cool_yylval;
+extern int input(); // lex function
 
 /*
  *  Add Your own definitions here
@@ -55,13 +60,18 @@ void inLinecomment() {
       break;
     } 
     else if (c == EOF) {
-      error( "EOF in comment" );
-      break;
+      // error( "EOF in comment" );
+      // break;
+      yylval.str = "EOF in comment";
+      return -1;
     }
   }
+  }
+  
+  return 0;
 }
 
-void multiLineComment() {
+int multiLineComment() {
   register int c;
 
   while(1) {
@@ -79,66 +89,82 @@ void multiLineComment() {
       curr_lineno++;
 
     else if(c == EOF) {
-      error( "EOF in comment" );
-      break;
+      // error( "EOF in comment" );
+      // break;
+      yylval.str = "EOF in comment";
+      return -1;
     }
   }
+
+  return 0;
 }
 
-char* getString() {
+int setStringValue() {
   register int c;
   int i = 0;
 
   while(1) {
-    while((c = input()) != '"' && c != '\\' && c != '\n' && c != EOF){
-      if( i > MAX_STR_CONST ){
-        error( "String is too long" );
-        break;
-      }
+    c = input();
 
-      string_buf[i++] = (char) c;
+    if( (i + 1) >= MAX_STR_CONST ){
+      yylval.str = "String constant too long";
+      return -1;
     }
 
-    if( c == '\\' ) {
+    if( c == '\0' ) {
+      yylval.str = "String contains null character";
+      return -1;
+    }
+
+    else if( c == '\\' ) {
       c = input();
 
-      if( i > MAX_STR_CONST ){
-        error( "String is too long" );
-        break;
+      if( (i + 1) >= MAX_STR_CONST ){
+        yylval.str = "String constant too long";
+        return -1;
       }
 
-
       if( c == 'b' )
-        string_buf[i] = '\b';
+        string_buf[i++] = '\b';
 
       else if( c == 't' )
-        string_buf[i] = '\t';
+        string_buf[i++] = '\t';
 
       else if( c == 'n' )
-        string_buf[i] = '\n';
+        string_buf[i++] = '\n';
 
       else if( c == 'f' ) 
-        string_buf[i] = '\f';
+        string_buf[i++] = '\f';
 
       else if( c == '\n')
         curr_lineno++;
       
-      
+      else 
+        string_buf[i++] = (char) c;
+
       i++;
     } 
-    else if( c == '\n' ){
-      error( "Non-scaped newline in comment" );
-      break;
+
+    else if( c == '\n' ) {
+      yylval.str = "Unterminated string constant";
+      return -1;
     } 
+
     else if( c == EOF ) {
-      error( "EOF in comment" );
-      break;
+      yylval.str = "EOF in string constant";
+      return -1;
     } 
-    else // c = '"'
+
+    else if( c = '"' )
       break;
+    
+    else {
+      string_buf[i++] = (char) c;
+    }
   }
 
-  return strncpy(string_buf, 0, i+1);
+  yylval.str = strncpy(string_buf, 0, i);
+  return 0;
 }
 
 %}
@@ -165,9 +191,9 @@ WHITE_SPACE       [\s\f\r\t\v]
   *  The multiple-character operators.
   */
 {DARROW}		{ return (DARROW); }
-"--"        {printf("IL Comment");inLineComment();}
-"(*"        {printf("ML Comment");multiLineComment();}
-"\""        {printf("String"); return getString();}
+"--"        {if( inLineComment() == -1 ) return ERROR;}
+"(*"        {if( multiLineComment() == -1 ) return ERROR;}
+"\""        {if( setStringValue() == -1 ) return ERROR; return STR_CONST;}
 <<EOF>>     {yyterminate();}
 
 
