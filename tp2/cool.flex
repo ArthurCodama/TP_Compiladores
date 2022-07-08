@@ -229,6 +229,7 @@ NOT               (?i:not)
 {ESAC}            { return (ESAC); }
 {NEW}             { return (NEW); }
 {OF}              { return (OF); }
+{NOT}             { return (NOT); }
 {ID_TYPE}         { return (ID_TYPE); }
 {ID_OBJECT}       { return (ID_OBJECT); }
 
