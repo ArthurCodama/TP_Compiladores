@@ -154,7 +154,7 @@ int setStringValue() {
       return -1;
     } 
 
-    else if( c = '"' )
+    else if( c == '"' )
       break;
     
     else {
