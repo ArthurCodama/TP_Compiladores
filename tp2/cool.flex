@@ -43,26 +43,25 @@ extern YYSTYPE cool_yylval;
  *  Add Your own definitions here
  */
 
-void inLinecomment(){
+void inLinecomment() {
   register int c;
 
   while(1) {
     while((c = input()) != '\n' && c != EOF)
       ; /* eat up text of comment */
 
-    if(c == '\n'){
+    if(c == '\n') {
       curr_lineno++;
       break;
-    }
-      
-    if (c == EOF){
+    } 
+    else if (c == EOF) {
       error( "EOF in comment" );
       break;
     }
   }
 }
 
-void multiLineComment(){
+void multiLineComment() {
   register int c;
 
   while(1) {
@@ -79,37 +78,67 @@ void multiLineComment(){
     if(c == '\n')
       curr_lineno++;
 
-    if (c == EOF){
+    else if(c == EOF) {
       error( "EOF in comment" );
       break;
     }
   }
 }
 
-char* getString(){
+char* getString() {
   register int c;
   int i = 0;
 
   while(1) {
-    while((c = input()) != '*' && c != '\n' && c != EOF)
-      ; /* eat up text of comment */
+    while((c = input()) != '"' && c != '\\' && c != '\n' && c != EOF){
+      if( i > MAX_STR_CONST ){
+        error( "String is too long" );
+        break;
+      }
 
-    if(c == '*') {
-      while((c = input()) == '*')
-        ;
-      if (c == ')')
-        break; /* found the end */
+      string_buf[i++] = (char) c;
     }
 
-    if(c == '\n')
-      curr_lineno++;
+    if( c == '\\' ) {
+      c = input();
 
-    if (c == EOF){
+      if( i > MAX_STR_CONST ){
+        error( "String is too long" );
+        break;
+      }
+
+
+      if( c == 'b' )
+        string_buf[i] = '\b';
+
+      else if( c == 't' )
+        string_buf[i] = '\t';
+
+      else if( c == 'n' )
+        string_buf[i] = '\n';
+
+      else if( c == 'f' ) 
+        string_buf[i] = '\f';
+
+      else if( c == '\n')
+        curr_lineno++;
+      
+      
+      i++;
+    } 
+    else if( c == '\n' ){
+      error( "Non-scaped newline in comment" );
+      break;
+    } 
+    else if( c == EOF ) {
       error( "EOF in comment" );
       break;
-    }
+    } 
+    else // c = '"'
+      break;
   }
-  return 
+
+  return strncpy(string_buf, 0, i+1);
 }
 
 %}
@@ -121,9 +150,9 @@ char* getString(){
 DARROW            =>
 C_INT             [0-9]+
 C_BOOL            (t(?i:[rue])|f(?i:[alse]))
-ID_TYPE           [A-Z][a-z|A-Z|0-9_]*
-ID_OBJECT         [a-z][a-z|A-Z|0-9_]*
-WHITE_SPACE       [\ \f\r\t\v]
+ID_TYPE           [A-Z][a-z|A-Z|0-9|_]*
+ID_OBJECT         [a-z][a-z|A-Z|0-9|_]*
+WHITE_SPACE       [\s\f\r\t\v]
 
 %%
 
