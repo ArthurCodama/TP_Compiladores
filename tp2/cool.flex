@@ -173,17 +173,11 @@ int setStringValue() {
  * Define names for regular expressions here.
  */
 
-DARROW            =>
 C_INT             [0-9]+
 C_BOOL            (t(?i:[rue])|f(?i:[alse]))
 ID_TYPE           [A-Z][a-z|A-Z|0-9|_]*
 ID_OBJECT         [a-z][a-z|A-Z|0-9|_]*
 WHITE_SPACE       [\s\f\r\t\v]
-C_INT             [0-9]+
-C_BOOL            (t(?i:[rue])|f(?i:[alse]))
-ID_TYPE           [A-Z][a-z|A-Z|0-9_]*
-ID_OBJECT         [a-z][a-z|A-Z|0-9_]*
-WHITE_SPACE       [\ \f\r\t\v]
 CLASS             (?i:class)
 ELSE              (?i:else)
 FI                (?i:fi)
@@ -212,18 +206,13 @@ NOT               (?i:not)
  /*
   *  The multiple-character operators.
   */
-<<<<<<< HEAD
-{DARROW}		{ return (DARROW); }
-"--"        {if( inLineComment() == -1 ) return ERROR;}
-"(*"        {if( multiLineComment() == -1 ) return ERROR;}
-"\""        {if( setStringValue() == -1 ) return ERROR; return STR_CONST;}
-<<EOF>>     {yyterminate();}
-=======
-{DARROW}		      { return (DARROW); }
-"--"              { printf("IL Comment"); inLineComment(); }
-"(*"              { printf("ML Comment"); multiLineComment(); }
-"\""              { printf("String"); return getString(); }
 
+"--"              { if( inLineComment() == -1 ) return (ERROR); }
+"(*"              { if( multiLineComment() == -1 ) return (ERROR); }
+"\""              { if( setStringValue() == -1 ) return (ERROR); return (STR_CONST); }
+{C_INT}           { return (C_INT); }
+{C_BOOL}          { return (C_BOOL); }
+{WHITE_SPACE}     { return (WHITE_SPACE); }
 {CLASS}           { return (CLASS); }
 {ELSE}            { return (ELSE); }
 {FI}              { return (FI); }
@@ -240,10 +229,31 @@ NOT               (?i:not)
 {ESAC}            { return (ESAC); }
 {NEW}             { return (NEW); }
 {OF}              { return (OF); }
-{NOT}             { return (NOT); }
+{ID_TYPE}         { return (ID_TYPE); }
+{ID_OBJECT}       { return (ID_OBJECT); }
+
+"=>"    		      { return (DARROW); }
+"<-"              { RETURN (L_ARROW); }
+"."               { RETURN (POINT); }
+"("               { RETURN (L_PAR); }
+")"               { RETURN (R_PAR); }
+"@"               { RETURN (AT); }
+"{"               { RETURN (L_KEY); }
+"}"               { RETURN (R_KEY); }
+";"               { RETURN (SEMIC); }
+":"               { RETURN (COLON); }
+"["               { RETURN (L_BRA); }
+"]"               { RETURN (R_BRA); }
+"+"               { RETURN (PLUS); }
+"-"               { RETURN (MINUS); }
+"*"               { RETURN (ASTERISK); }
+"/"               { RETURN (BAR); }
+"<"               { RETURN (LT); }
+"<="              { RETURN (LTE); }
+"="               { RETURN (EQ); }
+"~"               { RETURN (TILDE); }
 
 <<EOF>>           { yyterminate(); }
->>>>>>> ca821f04484619b6e01c3ceac6a0ca9f5476a456
 
 
 
