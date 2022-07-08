@@ -153,6 +153,29 @@ C_BOOL            (t(?i:[rue])|f(?i:[alse]))
 ID_TYPE           [A-Z][a-z|A-Z|0-9|_]*
 ID_OBJECT         [a-z][a-z|A-Z|0-9|_]*
 WHITE_SPACE       [\s\f\r\t\v]
+DARROW            =>
+C_INT             [0-9]+
+C_BOOL            (t(?i:[rue])|f(?i:[alse]))
+ID_TYPE           [A-Z][a-z|A-Z|0-9_]*
+ID_OBJECT         [a-z][a-z|A-Z|0-9_]*
+WHITE_SPACE       [\ \f\r\t\v]
+CLASS             (?i:class)
+ELSE              (?i:else)
+FI                (?i:fi)
+IF                (?i:if)
+IN                (?i:in)
+INHERITS          (?i:inherits)
+ISVOID            (?i:isvoid)
+LET               (?i:let)
+LOOP              (?i:loop)
+POOL              (?i:pool)
+THEN              (?i:then)
+WHILE             (?i:while)
+CASE              (?i:case)
+ESAC              (?i:esac)
+NEW               (?i:new)
+OF                (?i:of)
+NOT               (?i:not)
 
 %%
 
