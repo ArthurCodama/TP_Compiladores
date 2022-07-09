@@ -50,8 +50,6 @@ extern YYSTYPE cool_yylval;
 extern int input(); // lex function
 int tableIndex = 0;
 
-%}
-
 int inLineComment() {
   register int c;
 
@@ -165,6 +163,8 @@ int setStringValue() {
   yylval.symbol = Entry(strncpy(string_buf, 0, i), i, tableIndex++);
   return 0;
 }
+
+%}
 
 /*
  * Define names for regular expressions here.
