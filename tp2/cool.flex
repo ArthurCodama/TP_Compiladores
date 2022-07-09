@@ -74,11 +74,11 @@ int multiLineComment() {
   register int c;
 
   while(1) {
-    while((c = inputt()) != '*' && c != '\n' && c != EOF)
+    while((c = input()) != '*' && c != '\n' && c != EOF)
       ; /* eat up text of comment */
 
     if(c == '*') {
-      while((c = inputt()) == '*')
+      while((c = input()) == '*')
         ;
       if (c == ')')
         break; /* found the end */
@@ -101,7 +101,7 @@ int setStringValue() {
   int i = 0;
 
   while(1) {
-    c = inputt();
+    c = input();
 
     if( (i + 1) >= MAX_STR_CONST ){
       yylval.error_msg = "String constant too long";
@@ -114,7 +114,7 @@ int setStringValue() {
     }
 
     else if( c == '\\' ) {
-      c = inputt();
+      c = input();
 
       if( (i + 1) >= MAX_STR_CONST ){
         yylval.error_msg = "String constant too long";
