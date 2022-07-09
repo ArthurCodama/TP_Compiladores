@@ -62,7 +62,7 @@ int inLineComment() {
       break;
     } 
     else if (c == EOF) {
-      yylval.error_msg = "EOF in comment";
+      yylval.error_msg = (char*)"EOF in comment";
       return -1;
     }
   }
@@ -88,7 +88,7 @@ int multiLineComment() {
       curr_lineno++;
 
     else if(c == EOF) {
-      yylval.error_msg = "EOF in comment";
+      yylval.error_msg = (char*)"EOF in comment";
       return -1;
     }
   }
@@ -104,12 +104,12 @@ int setStringValue() {
     c = yyinput();
 
     if( (i + 1) >= MAX_STR_CONST ){
-      yylval.error_msg = "String constant too long";
+      yylval.error_msg = (char*)"String constant too long";
       return -1;
     }
 
     if( c == '\0' ) {
-      yylval.error_msg = "String contains null character";
+      yylval.error_msg = (char*)"String contains null character";
       return -1;
     }
 
@@ -117,7 +117,7 @@ int setStringValue() {
       c = yyinput();
 
       if( (i + 1) >= MAX_STR_CONST ){
-        yylval.error_msg = "String constant too long";
+        yylval.error_msg = (char*)"String constant too long";
         return -1;
       }
 
@@ -143,12 +143,12 @@ int setStringValue() {
     } 
 
     else if( c == '\n' ) {
-      yylval.error_msg = "Unterminated string constant";
+      yylval.error_msg = (char*)"Unterminated string constant";
       return -1;
     } 
 
     else if( c == EOF ) {
-      yylval.error_msg = "EOF in string constant";
+      yylval.error_msg = (char*)"EOF in string constant";
       return -1;
     } 
 
