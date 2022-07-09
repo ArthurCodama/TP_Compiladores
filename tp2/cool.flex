@@ -266,6 +266,7 @@ NOT               (?i:not)
 "<"               { return '<'; }
 "="               { return '='; }
 "~"               { return '~'; }
+","               { return ','; }
 
 <<EOF>>           { yyterminate(); }
 
