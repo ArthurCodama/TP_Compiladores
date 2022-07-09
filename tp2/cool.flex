@@ -62,8 +62,6 @@ int inLineComment() {
       break;
     } 
     else if (c == EOF) {
-      // error( "EOF in comment" );
-      // break;
       yylval.error_msg = "EOF in comment";
       return -1;
     }
@@ -90,8 +88,6 @@ int multiLineComment() {
       curr_lineno++;
 
     else if(c == EOF) {
-      // error( "EOF in comment" );
-      // break;
       yylval.error_msg = "EOF in comment";
       return -1;
     }
