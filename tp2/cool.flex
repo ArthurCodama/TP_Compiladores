@@ -47,14 +47,14 @@ extern YYSTYPE cool_yylval;
  *  Add Your own definitions here
  */
 
-extern int input(); // lex function
+static int yyinput(); // lex function
 int tableIndex = 0;
 
-int inLinecomment() {
+int inLineComment() {
   register int c;
 
   while(1) {
-    while((c = input()) != '\n' && c != EOF)
+    while((c = yyinput()) != '\n' && c != EOF)
       ; /* eat up text of comment */
 
     if(c == '\n') {
@@ -74,11 +74,11 @@ int multiLineComment() {
   register int c;
 
   while(1) {
-    while((c = input()) != '*' && c != '\n' && c != EOF)
+    while((c = yyinput()) != '*' && c != '\n' && c != EOF)
       ; /* eat up text of comment */
 
     if(c == '*') {
-      while((c = input()) == '*')
+      while((c = yyinput()) == '*')
         ;
       if (c == ')')
         break; /* found the end */
@@ -101,7 +101,7 @@ int setStringValue() {
   int i = 0;
 
   while(1) {
-    c = input();
+    c = yyinput();
 
     if( (i + 1) >= MAX_STR_CONST ){
       yylval.error_msg = "String constant too long";
@@ -114,7 +114,7 @@ int setStringValue() {
     }
 
     else if( c == '\\' ) {
-      c = input();
+      c = yyinput();
 
       if( (i + 1) >= MAX_STR_CONST ){
         yylval.error_msg = "String constant too long";
@@ -159,8 +159,10 @@ int setStringValue() {
       string_buf[i++] = (char) c;
     }
   }
-
-  yylval.symbol = Entry(strncpy(string_buf, 0, i), i, tableIndex++);
+  char* string = (char *) malloc(i * sizeof(char));
+  strncpy(string, string_buf, i);
+  yylval.symbol = new Entry(string, i, tableIndex++);
+  free(string);
   return 0;
 }
 
