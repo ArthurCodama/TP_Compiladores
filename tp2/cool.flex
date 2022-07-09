@@ -32,8 +32,8 @@ extern FILE *fin; /* we read from this file */
  */
 #undef YY_INPUT
 #define YY_INPUT(buf,result,max_size) \
-	if ( (result = fread( (char*)buf, sizeof(char), max_size, fin)) < 0) \
-		YY_FATAL_ERROR( "read() in flex scanner failed");
+  if ( (result = fread( (char*)buf, sizeof(char), max_size, fin)) < 0) \
+    YY_FATAL_ERROR( "read() in flex scanner failed");
 
 char string_buf[MAX_STR_CONST]; /* to assemble string constants */
 char *string_buf_ptr;
@@ -47,10 +47,14 @@ extern YYSTYPE cool_yylval;
  *  Add Your own definitions here
  */
 
+<<<<<<< HEAD
 extern int input(); // lex function
 int tableIndex = 0;
 
 int inLinecomment() {
+=======
+int inLineComment() {
+>>>>>>> b1283f6dfc3f90393cddebbc5e03d8c73b4ef11e
   register int c;
 
   while(1) {
@@ -62,10 +66,14 @@ int inLinecomment() {
       break;
     } 
     else if (c == EOF) {
+<<<<<<< HEAD
+=======
+      // error( "EOF in comment" );
+      // break;
+>>>>>>> b1283f6dfc3f90393cddebbc5e03d8c73b4ef11e
       yylval.error_msg = "EOF in comment";
       return -1;
     }
-  }
   }
   
   return 0;
@@ -89,6 +97,11 @@ int multiLineComment() {
       curr_lineno++;
 
     else if(c == EOF) {
+<<<<<<< HEAD
+=======
+      // error( "EOF in comment" );
+      // break;
+>>>>>>> b1283f6dfc3f90393cddebbc5e03d8c73b4ef11e
       yylval.error_msg = "EOF in comment";
       return -1;
     }
@@ -205,12 +218,12 @@ NOT               (?i:not)
   *  The multiple-character operators.
   */
 
+{WHITE_SPACE}     {}
 "--"              { if( inLineComment() == -1 ) return (ERROR); }
 "(*"              { if( multiLineComment() == -1 ) return (ERROR); }
 "\""              { if( setStringValue() == -1 ) return (ERROR); return (STR_CONST); }
-{C_INT}           { return (C_INT); }
-{C_BOOL}          { return (C_BOOL); }
-{WHITE_SPACE}     { return (WHITE_SPACE); }
+{C_INT}           { return (INT_CONST); }
+{C_BOOL}          { return (BOOL_CONST); }
 {CLASS}           { return (CLASS); }
 {ELSE}            { return (ELSE); }
 {FI}              { return (FI); }
@@ -227,30 +240,30 @@ NOT               (?i:not)
 {ESAC}            { return (ESAC); }
 {NEW}             { return (NEW); }
 {OF}              { return (OF); }
+{ID_TYPE}         { return (TYPEID); }
+{ID_OBJECT}       { return (OBJECTID); }
 {NOT}             { return (NOT); }
-{ID_TYPE}         { return (ID_TYPE); }
-{ID_OBJECT}       { return (ID_OBJECT); }
 
-"=>"    		      { return (DARROW); }
-"<-"              { return (L_ARROW); }
-"."               { return (POINT); }
-"("               { return (L_PAR); }
-")"               { return (R_PAR); }
-"@"               { return (AT); }
-"{"               { return (L_KEY); }
-"}"               { return (R_KEY); }
-";"               { return (SEMIC); }
-":"               { return (COLON); }
-"["               { return (L_BRA); }
-"]"               { return (R_BRA); }
-"+"               { return (PLUS); }
-"-"               { return (MINUS); }
-"*"               { return (ASTERISK); }
-"/"               { return (BAR); }
-"<"               { return (LT); }
-"<="              { return (LTE); }
-"="               { return (EQ); }
-"~"               { return (TILDE); }
+"=>"              { return (DARROW); }
+"<-"              { return (ASSIGN); }
+"<="              { return (LE); }
+"."               { return '.'; }
+"("               { return '('; }
+")"               { return ')'; }
+"@"               { return '@'; }
+"{"               { return '{'; }
+"}"               { return '}'; }
+";"               { return ';'; }
+":"               { return ':'; }
+"["               { return '['; }
+"]"               { return ']'; }
+"+"               { return '+'; }
+"-"               { return '-'; }
+"*"               { return '*'; }
+"/"               { return '/'; }
+"<"               { return '<'; }
+"="               { return '='; }
+"~"               { return '~'; }
 
 <<EOF>>           { yyterminate(); }
 
