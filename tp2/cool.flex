@@ -42,13 +42,15 @@ extern int curr_lineno;
 extern int verbose_flag;
 
 extern YYSTYPE cool_yylval;
-extern int input(); // lex function
 
 /*
  *  Add Your own definitions here
  */
 
-void inLinecomment() {
+extern int input(); // lex function
+int tableIndex = 0;
+
+int inLinecomment() {
   register int c;
 
   while(1) {
@@ -60,9 +62,7 @@ void inLinecomment() {
       break;
     } 
     else if (c == EOF) {
-      // error( "EOF in comment" );
-      // break;
-      yylval.str = "EOF in comment";
+      yylval.error_msg = "EOF in comment";
       return -1;
     }
   }
@@ -89,9 +89,7 @@ int multiLineComment() {
       curr_lineno++;
 
     else if(c == EOF) {
-      // error( "EOF in comment" );
-      // break;
-      yylval.str = "EOF in comment";
+      yylval.error_msg = "EOF in comment";
       return -1;
     }
   }
@@ -107,12 +105,12 @@ int setStringValue() {
     c = input();
 
     if( (i + 1) >= MAX_STR_CONST ){
-      yylval.str = "String constant too long";
+      yylval.error_msg = "String constant too long";
       return -1;
     }
 
     if( c == '\0' ) {
-      yylval.str = "String contains null character";
+      yylval.error_msg = "String contains null character";
       return -1;
     }
 
@@ -120,7 +118,7 @@ int setStringValue() {
       c = input();
 
       if( (i + 1) >= MAX_STR_CONST ){
-        yylval.str = "String constant too long";
+        yylval.error_msg = "String constant too long";
         return -1;
       }
 
@@ -146,16 +144,16 @@ int setStringValue() {
     } 
 
     else if( c == '\n' ) {
-      yylval.str = "Unterminated string constant";
+      yylval.error_msg = "Unterminated string constant";
       return -1;
     } 
 
     else if( c == EOF ) {
-      yylval.str = "EOF in string constant";
+      yylval.error_msg = "EOF in string constant";
       return -1;
     } 
 
-    else if( c = '"' )
+    else if( c == '"' )
       break;
     
     else {
@@ -163,7 +161,7 @@ int setStringValue() {
     }
   }
 
-  yylval.str = strncpy(string_buf, 0, i);
+  yylval.symbol = Entry(strncpy(string_buf, 0, i), i, tableIndex++);
   return 0;
 }
 
@@ -234,25 +232,25 @@ NOT               (?i:not)
 {ID_OBJECT}       { return (ID_OBJECT); }
 
 "=>"    		      { return (DARROW); }
-"<-"              { RETURN (L_ARROW); }
-"."               { RETURN (POINT); }
-"("               { RETURN (L_PAR); }
-")"               { RETURN (R_PAR); }
-"@"               { RETURN (AT); }
-"{"               { RETURN (L_KEY); }
-"}"               { RETURN (R_KEY); }
-";"               { RETURN (SEMIC); }
-":"               { RETURN (COLON); }
-"["               { RETURN (L_BRA); }
-"]"               { RETURN (R_BRA); }
-"+"               { RETURN (PLUS); }
-"-"               { RETURN (MINUS); }
-"*"               { RETURN (ASTERISK); }
-"/"               { RETURN (BAR); }
-"<"               { RETURN (LT); }
-"<="              { RETURN (LTE); }
-"="               { RETURN (EQ); }
-"~"               { RETURN (TILDE); }
+"<-"              { return (L_ARROW); }
+"."               { return (POINT); }
+"("               { return (L_PAR); }
+")"               { return (R_PAR); }
+"@"               { return (AT); }
+"{"               { return (L_KEY); }
+"}"               { return (R_KEY); }
+";"               { return (SEMIC); }
+":"               { return (COLON); }
+"["               { return (L_BRA); }
+"]"               { return (R_BRA); }
+"+"               { return (PLUS); }
+"-"               { return (MINUS); }
+"*"               { return (ASTERISK); }
+"/"               { return (BAR); }
+"<"               { return (LT); }
+"<="              { return (LTE); }
+"="               { return (EQ); }
+"~"               { return (TILDE); }
 
 <<EOF>>           { yyterminate(); }
 
