@@ -50,6 +50,8 @@ extern YYSTYPE cool_yylval;
 extern int input(); // lex function
 int tableIndex = 0;
 
+%}
+
 int inLineComment() {
   register int c;
 
@@ -74,11 +76,11 @@ int multiLineComment() {
   register int c;
 
   while(1) {
-    while((c = yyinput()) != '*' && c != '\n' && c != EOF)
+    while((c = inputt()) != '*' && c != '\n' && c != EOF)
       ; /* eat up text of comment */
 
     if(c == '*') {
-      while((c = yyinput()) == '*')
+      while((c = inputt()) == '*')
         ;
       if (c == ')')
         break; /* found the end */
@@ -101,7 +103,7 @@ int setStringValue() {
   int i = 0;
 
   while(1) {
-    c = yyinput();
+    c = inputt();
 
     if( (i + 1) >= MAX_STR_CONST ){
       yylval.error_msg = "String constant too long";
@@ -114,7 +116,7 @@ int setStringValue() {
     }
 
     else if( c == '\\' ) {
-      c = yyinput();
+      c = inputt();
 
       if( (i + 1) >= MAX_STR_CONST ){
         yylval.error_msg = "String constant too long";
@@ -163,8 +165,6 @@ int setStringValue() {
   yylval.symbol = Entry(strncpy(string_buf, 0, i), i, tableIndex++);
   return 0;
 }
-
-%}
 
 /*
  * Define names for regular expressions here.
