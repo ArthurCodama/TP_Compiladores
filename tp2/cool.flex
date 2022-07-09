@@ -51,7 +51,7 @@ static int yyinput(); // lex function
 int tableIndex = 0;
 
 int inLineComment() {
-  register int c;
+  int c;
 
   while(1) {
     while((c = yyinput()) != '\n' && c != EOF)
@@ -71,15 +71,16 @@ int inLineComment() {
 }
 
 int multiLineComment() {
-  register int c;
+  int c;
 
   while(1) {
-    while((c = yyinput()) != '*' && c != '\n' && c != EOF)
-      ; /* eat up text of comment */
+    c = yyinput();
 
     if(c == '*') {
-      while((c = yyinput()) == '*')
-        ;
+      do{
+        c = yyinput(); // Le o prox caractere
+      } while(c == '*');
+
       if (c == ')')
         break; /* found the end */
     }
@@ -93,11 +94,12 @@ int multiLineComment() {
     }
   }
 
+    
   return 0;
 }
 
 int setStringValue() {
-  register int c;
+  int c;
   int i = 0;
 
   while(1) {
@@ -152,16 +154,17 @@ int setStringValue() {
       return -1;
     } 
 
-    else if( c == '"' )
+    else if( c == '\"' )
       break;
     
     else {
       string_buf[i++] = (char) c;
     }
   }
+  
   char* string = (char *) malloc(i * sizeof(char));
   strncpy(string, string_buf, i);
-  yylval.symbol = new Entry(string, i, tableIndex++);
+  yylval.symbol = new Entry(strdup(string), i, tableIndex++);
   free(string);
   return 0;
 }
@@ -210,8 +213,15 @@ NOT               (?i:not)
 "--"              { if( inLineComment() == -1 ) return (ERROR); }
 "(*"              { if( multiLineComment() == -1 ) return (ERROR); }
 "\""              { if( setStringValue() == -1 ) return (ERROR); return (STR_CONST); }
-{C_INT}           { return (INT_CONST); }
-{C_BOOL}          { return (BOOL_CONST); }
+{C_INT}           { yylval.symbol = new Entry((char*) yytext, yyleng, tableIndex++);
+                    return (INT_CONST); 
+                  }
+{C_BOOL}          { if(yytext[0]=='t')
+                        yylval.boolean = 1;
+                    else
+                        yylval.boolean = 0;
+                    return (BOOL_CONST); 
+                  }
 {CLASS}           { return (CLASS); }
 {ELSE}            { return (ELSE); }
 {FI}              { return (FI); }
@@ -228,8 +238,12 @@ NOT               (?i:not)
 {ESAC}            { return (ESAC); }
 {NEW}             { return (NEW); }
 {OF}              { return (OF); }
-{ID_TYPE}         { return (TYPEID); }
-{ID_OBJECT}       { return (OBJECTID); }
+{ID_TYPE}         { yylval.symbol = new Entry((char*) yytext, yyleng, tableIndex++);
+                    return (TYPEID); 
+                  }
+{ID_OBJECT}       { yylval.symbol = new Entry((char*) yytext, yyleng, tableIndex++);
+                    return (OBJECTID); 
+                  }
 {NOT}             { return (NOT); }
 
 "=>"              { return (DARROW); }
@@ -272,8 +286,3 @@ NOT               (?i:not)
 
 
 %%
-/*
-main(){
-  yylex();
-}
-*/

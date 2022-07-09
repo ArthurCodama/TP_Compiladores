@@ -1,6 +1,1 @@
---comment
-(*
-    multiLineComment
-*)
-
-"a"
+Ai
