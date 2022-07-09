@@ -74,12 +74,12 @@ int multiLineComment() {
   register int c;
 
   while(1) {
-    while((c = yyinput()) != '*' && c != '\n' && c != EOF)
-      ; /* eat up text of comment */
+    while((c = yyinput()) != '*' && c != '\n' && c != EOF);
+    /* eat up text of comment */
 
     if(c == '*') {
-      while((c = yyinput()) == '*')
-        ;
+      while((c = yyinput()) == '*');
+        
       if (c == ')')
         break; /* found the end */
     }
@@ -252,6 +252,7 @@ NOT               (?i:not)
 "<"               { return '<'; }
 "="               { return '='; }
 "~"               { return '~'; }
+","               { return ','; }
 
 <<EOF>>           { yyterminate(); }
 
