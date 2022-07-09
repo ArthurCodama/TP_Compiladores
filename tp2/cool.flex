@@ -42,13 +42,19 @@ extern int curr_lineno;
 extern int verbose_flag;
 
 extern YYSTYPE cool_yylval;
-extern int input(); // lex function
 
 /*
  *  Add Your own definitions here
  */
 
+<<<<<<< HEAD
+extern int input(); // lex function
+int tableIndex = 0;
+
+int inLinecomment() {
+=======
 int inLineComment() {
+>>>>>>> b1283f6dfc3f90393cddebbc5e03d8c73b4ef11e
   register int c;
 
   while(1) {
@@ -60,8 +66,11 @@ int inLineComment() {
       break;
     } 
     else if (c == EOF) {
+<<<<<<< HEAD
+=======
       // error( "EOF in comment" );
       // break;
+>>>>>>> b1283f6dfc3f90393cddebbc5e03d8c73b4ef11e
       yylval.error_msg = "EOF in comment";
       return -1;
     }
@@ -88,8 +97,11 @@ int multiLineComment() {
       curr_lineno++;
 
     else if(c == EOF) {
+<<<<<<< HEAD
+=======
       // error( "EOF in comment" );
       // break;
+>>>>>>> b1283f6dfc3f90393cddebbc5e03d8c73b4ef11e
       yylval.error_msg = "EOF in comment";
       return -1;
     }
@@ -162,7 +174,7 @@ int setStringValue() {
     }
   }
 
-  yylval.error_msg = strncpy(string_buf, 0, i);
+  yylval.symbol = Entry(strncpy(string_buf, 0, i), i, tableIndex++);
   return 0;
 }
 
